@@ -1,51 +1,61 @@
-export function parseDocumentXml(xmlString) {
+import { parseRunStyles } from './styling.js';
+
+export function parseDocx(xmlString) {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
-  const paragraphs = [];
+  const ns = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
 
-  const xpathResult = xmlDoc.evaluate(
-    "//*[local-name()='p']",
+  const paragraphs = [];
+  const pResult = xmlDoc.evaluate(
+    `//*[local-name()='p']`,
     xmlDoc,
     null,
-    XPathResult.ANY_TYPE,
+    XPathResult.ORDERED_NODE_ITERATOR_TYPE,
     null
   );
 
-  let pNode = xpathResult.iterateNext();
-
+  let pNode = pResult.iterateNext();
   while (pNode) {
     const runs = [];
-    const runResult = xmlDoc.evaluate(
-      ".//*[local-name()='r']",
+
+    // Get all <w:r> inside this paragraph
+    const rResult = xmlDoc.evaluate(
+      `.//*[local-name()='r']`,
       pNode,
       null,
-      XPathResult.ANY_TYPE,
+      XPathResult.ORDERED_NODE_ITERATOR_TYPE,
       null
     );
 
-    let rNode = runResult.iterateNext();
+    let rNode = rResult.iterateNext();
     while (rNode) {
-      const textResult = xmlDoc.evaluate(
-        ".//*[local-name()='t']",
+      // Extract text inside <w:t> (can be multiple)
+      const tResult = xmlDoc.evaluate(
+        `.//*[local-name()='t']`,
         rNode,
         null,
-        XPathResult.ANY_TYPE,
+        XPathResult.ORDERED_NODE_ITERATOR_TYPE,
         null
       );
 
-      let tNode = textResult.iterateNext();
       let text = '';
+      let tNode = tResult.iterateNext();
       while (tNode) {
         text += tNode.textContent;
-        tNode = textResult.iterateNext();
+        tNode = tResult.iterateNext();
       }
 
-      runs.push({ text });
-      rNode = runResult.iterateNext();
+      if (text.length > 0) {
+        // Parse styles from this run node
+        const style = parseRunStyles(rNode);
+        runs.push({ text, ...style });
+      }
+
+      rNode = rResult.iterateNext();
     }
 
     paragraphs.push({ runs });
-    pNode = xpathResult.iterateNext();
+    pNode = pResult.iterateNext();
   }
 
   return paragraphs;
