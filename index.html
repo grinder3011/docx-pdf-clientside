@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple DOCX to PDF Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      max-width: 600px;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+    }
+    #output {
+      margin-top: 2rem;
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      height: 150px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple DOCX to PDF Converter</h1>
+
+  <input type="file" id="docxFile" accept=".docx" />
+  <br />
+  <button id="convertBtn" disabled>Convert to PDF</button>
+
+  <div id="output"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
