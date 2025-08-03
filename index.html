@@ -2,24 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Modular DOCX to PDF Converter</title>
+  <title>DOCX to PDF Converter - Working Minimal</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem; }
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; }
     button { margin-top: 1rem; padding: 0.5rem 1rem; }
     #output { margin-top: 1rem; }
   </style>
 </head>
 <body>
-  <h1>Modular DOCX to PDF Converter</h1>
-
+  <h1>DOCX to PDF Converter</h1>
   <input type="file" id="docxFile" accept=".docx" />
   <br />
   <button id="convertBtn" disabled>Convert to PDF</button>
-
   <div id="output"></div>
 
-  <!-- Load JSZip and pdf-lib from CDN -->
+  <!-- Load JSZip and pdf-lib as global scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <!-- Load your main module -->
   <script type="module" src="./docx-to-pdf.js"></script>
 </body>
 </html>
