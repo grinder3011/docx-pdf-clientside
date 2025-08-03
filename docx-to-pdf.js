@@ -28,14 +28,18 @@ convertBtn.addEventListener('click', async () => {
 
     const pdfDoc = await PDFLib.PDFDocument.create();
     let page = pdfDoc.addPage();
-    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
     const pageWidth = page.getWidth();
     const pageHeight = page.getHeight();
+
+    // Embed all fonts needed for styles
+    const fontRegular = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+    const fontBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    const fontItalic = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaOblique);
 
     let y = pageHeight - 50;
 
     for (const paragraph of paragraphs) {
-      y = renderParagraph(page, paragraph, font, y);
+      y = renderParagraph(page, paragraph, { regular: fontRegular, bold: fontBold, italic: fontItalic }, y);
 
       if (y < 50) {
         page = pdfDoc.addPage();
