@@ -1,8 +1,6 @@
 import { parseDocumentXml } from './document-parser.js';
 import { renderParagraph } from './paragraph-handler.js';
 
-const { PDFDocument, StandardFonts, rgb } = PDFLib;
-
 const fileInput = document.getElementById('docxFile');
 const convertBtn = document.getElementById('convertBtn');
 const outputDiv = document.getElementById('output');
@@ -28,9 +26,9 @@ convertBtn.addEventListener('click', async () => {
 
     outputDiv.textContent = 'Generating PDF...';
 
-    const pdfDoc = await PDFDocument.create();
+    const pdfDoc = await PDFLib.PDFDocument.create();
     let page = pdfDoc.addPage();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
     const pageWidth = page.getWidth();
     const pageHeight = page.getHeight();
 
