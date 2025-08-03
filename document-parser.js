@@ -1,6 +1,7 @@
+// document-parser.js
 import { parseRunStyles } from './styling.js';
 
-export function parseDocx(xmlString) {
+export function parseDocumentXml(xmlString) {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
   const ns = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
@@ -18,7 +19,6 @@ export function parseDocx(xmlString) {
   while (pNode) {
     const runs = [];
 
-    // Get all <w:r> inside this paragraph
     const rResult = xmlDoc.evaluate(
       `.//*[local-name()='r']`,
       pNode,
@@ -29,7 +29,6 @@ export function parseDocx(xmlString) {
 
     let rNode = rResult.iterateNext();
     while (rNode) {
-      // Extract text inside <w:t> (can be multiple)
       const tResult = xmlDoc.evaluate(
         `.//*[local-name()='t']`,
         rNode,
@@ -46,7 +45,6 @@ export function parseDocx(xmlString) {
       }
 
       if (text.length > 0) {
-        // Parse styles from this run node
         const style = parseRunStyles(rNode);
         runs.push({ text, ...style });
       }
